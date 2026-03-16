@@ -10,17 +10,22 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const { title, genre, release_year } = req.body;
 
+    //  if (title) {
+    //     return res.status(400).json({ error: "title é obrigatório"});
+    // }
+
     const result = await pool.query(
         'INSERT INTO games (title, genre, release_year) VALUES ($1,$2,$3) RETURNING *',
         [title, genre, release_year]
     );
 
-    res.json(result.rows[0]);
+    // res.json(result.rows[0]);
+    res.status(201).json(result.rows[0]);
 });
 
 router.delete('/:id', async (req, res) => {
     await pool.query('DELETE FROM games WHERE id = $1', [req.params.id]);
-    res.sendStatus(204);
+    res.sendStatus(201);
 });
 
 module.exports = router;
